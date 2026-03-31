@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customrecordtype scriptid="customrecord_qubiton_config">
+    <recordname>QubitOn Configuration</recordname>
+    <abbreviation>QBN Config</abbreviation>
+    <description>Stores QubitOn API connection settings, error handling preferences, and logging configuration. One record per NetSuite account.</description>
+    <includename>F</includename>
+    <showid>F</showid>
+    <shownotes>F</shownotes>
+    <showcreateddate>T</showcreateddate>
+    <showlastmodified>T</showlastmodified>
+    <allowattachments>F</allowattachments>
+    <allowinlineediting>T</allowinlineediting>
+    <allowinlinedeleting>F</allowinlinedeleting>
+    <allowquickadd>F</allowquickadd>
+    <allowquicksearch>F</allowquicksearch>
+    <allowuiaccess>T</allowuiaccess>
+    <enablemailmerge>F</enablemailmerge>
+    <enablenumbering>F</enablenumbering>
+    <enablenumberingoverride>F</enablenumberingoverride>
+    <isinactive>F</isinactive>
+    <isordered>F</isordered>
+    <numberingprefix></numberingprefix>
+    <numberingsuffix></numberingsuffix>
+    <numberinginit></numberinginit>
+    <numberingmindigits></numberingmindigits>
+    <icon>CUSTOM10</icon>
+    <customrecordcustomfields>
+        <!-- API Key (stored as password field for security) -->
+        <customrecordcustomfield scriptid="custrecord_qbn_api_key">
+            <label>API Key</label>
+            <description>Your QubitOn API key. Obtain one at www.qubiton.com/auth/register. Stored securely as a password field — value is masked in the UI and not returned by SuiteScript reads.</description>
+            <fieldtype>PASSWORD</fieldtype>
+            <ismandatory>T</ismandatory>
+            <displaytype>NORMAL</displaytype>
+            <displayheight>1</displayheight>
+            <displaywidth>80</displaywidth>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>F</showinlist>
+            <globalsearch>F</globalsearch>
+            <help>Enter your QubitOn API key. Get one free at www.qubiton.com.</help>
+        </customrecordcustomfield>
+
+        <!-- Base URL -->
+        <customrecordcustomfield scriptid="custrecord_qbn_base_url">
+            <label>Base URL</label>
+            <description>QubitOn API base URL. Default is production; change only for testing or on-prem deployments.</description>
+            <fieldtype>TEXT</fieldtype>
+            <ismandatory>F</ismandatory>
+            <displaytype>NORMAL</displaytype>
+            <displayheight>1</displayheight>
+            <displaywidth>80</displaywidth>
+            <maxlength>255</maxlength>
+            <defaultvalue>https://api.qubiton.com</defaultvalue>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+            <globalsearch>F</globalsearch>
+            <help>QubitOn API base URL. Leave as default unless directed otherwise.</help>
+        </customrecordcustomfield>
+
+        <!-- HTTP Timeout (seconds) -->
+        <customrecordcustomfield scriptid="custrecord_qbn_timeout">
+            <label>Timeout (seconds)</label>
+            <description>HTTP request timeout in seconds. Applies to all API calls. Increase for batch operations or high-latency networks.</description>
+            <fieldtype>INTEGER</fieldtype>
+            <ismandatory>F</ismandatory>
+            <displaytype>NORMAL</displaytype>
+            <displayheight>1</displayheight>
+            <displaywidth>10</displaywidth>
+            <defaultvalue>30</defaultvalue>
+            <minvalue>5</minvalue>
+            <maxvalue>300</maxvalue>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+            <globalsearch>F</globalsearch>
+            <help>Request timeout in seconds (5-300). Default: 30.</help>
+        </customrecordcustomfield>
+
+        <!-- Error Mode -->
+        <customrecordcustomfield scriptid="custrecord_qbn_error_mode">
+            <label>Error Mode</label>
+            <description>Controls how validation failures are surfaced to users. E = Error (stop save), W = Warning (allow override), S = Silent (log only).</description>
+            <fieldtype>TEXT</fieldtype>
+            <ismandatory>F</ismandatory>
+            <displaytype>NORMAL</displaytype>
+            <displayheight>1</displayheight>
+            <displaywidth>10</displaywidth>
+            <maxlength>1</maxlength>
+            <defaultvalue>E</defaultvalue>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+            <globalsearch>F</globalsearch>
+            <help>E = Error (blocks save), W = Warning (user can override), S = Silent (log only).</help>
+        </customrecordcustomfield>
+
+        <!-- API Logging Enabled -->
+        <customrecordcustomfield scriptid="custrecord_qbn_log_enabled">
+            <label>Enable API Logging</label>
+            <description>When enabled, all API requests and responses are logged to the QubitOn API Log custom record for auditing and troubleshooting.</description>
+            <fieldtype>CHECKBOX</fieldtype>
+            <ismandatory>F</ismandatory>
+            <displaytype>NORMAL</displaytype>
+            <displayheight>1</displayheight>
+            <displaywidth>5</displaywidth>
+            <defaultvalue>T</defaultvalue>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+            <globalsearch>F</globalsearch>
+            <help>Check to enable API call logging. Recommended for production use.</help>
+        </customrecordcustomfield>
+    </customrecordcustomfields>
+</customrecordtype>

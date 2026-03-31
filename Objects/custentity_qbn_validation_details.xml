@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entitycustomfield scriptid="custentity_qbn_validation_details">
+    <label>QubitOn Details</label>
+    <description>JSON summary of last validation results.</description>
+    <fieldtype>TEXTAREA</fieldtype>
+    <ismandatory>F</ismandatory>
+    <displaytype>DISABLED</displaytype>
+    <maxlength>100000</maxlength>
+    <isformula>F</isformula>
+    <storevalue>T</storevalue>
+    <showinlist>F</showinlist>
+    <appliestocustomer>T</appliestocustomer>
+    <appliestovendor>T</appliestovendor>
+    <appliestopartner>T</appliestopartner>
+    <appliestoemployee>T</appliestoemployee>
+    <appliestocontact>T</appliestocontact>
+</entitycustomfield>

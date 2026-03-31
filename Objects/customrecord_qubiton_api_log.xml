@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customrecordtype scriptid="customrecord_qubiton_api_log">
+    <recordname>QubitOn API Log</recordname>
+    <abbreviation>QBN Log</abbreviation>
+    <description>Audit trail for all QubitOn API calls. Each record captures the HTTP method, endpoint, response status, duration, calling user, and any error details. Used for troubleshooting, compliance auditing, and usage monitoring.</description>
+    <includename>F</includename>
+    <showid>T</showid>
+    <shownotes>F</shownotes>
+    <showcreateddate>T</showcreateddate>
+    <showlastmodified>F</showlastmodified>
+    <allowattachments>F</allowattachments>
+    <allowinlineediting>F</allowinlineediting>
+    <allowinlinedeleting>F</allowinlinedeleting>
+    <allowquickadd>F</allowquickadd>
+    <allowquicksearch>T</allowquicksearch>
+    <allowuiaccess>T</allowuiaccess>
+    <enablemailmerge>F</enablemailmerge>
+    <enablenumbering>T</enablenumbering>
+    <numberingprefix>QBN-LOG-</numberingprefix>
+    <isinactive>F</isinactive>
+    <isordered>T</isordered>
+    <icon>CUSTOM13</icon>
+    <customrecordcustomfields>
+        <customrecordcustomfield scriptid="custrecord_qbn_log_method">
+            <label>HTTP Method</label>
+            <description>HTTP method used for the API call (GET or POST).</description>
+            <fieldtype>TEXT</fieldtype>
+            <ismandatory>F</ismandatory>
+            <displaytype>NORMAL</displaytype>
+            <maxlength>10</maxlength>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+            <globalsearch>F</globalsearch>
+        </customrecordcustomfield>
+
+        <!-- Endpoint -->
+        <customrecordcustomfield scriptid="custrecord_qbn_log_endpoint">
+            <label>Endpoint</label>
+            <description>The API endpoint path (e.g., /api/address/validate).</description>
+            <fieldtype>TEXT</fieldtype>
+            <ismandatory>T</ismandatory>
+            <displaytype>INLINE</displaytype>
+            <displayheight>1</displayheight>
+            <displaywidth>80</displaywidth>
+            <maxlength>255</maxlength>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+            <globalsearch>T</globalsearch>
+        </customrecordcustomfield>
+
+        <!-- HTTP Status Code -->
+        <customrecordcustomfield scriptid="custrecord_qbn_log_status">
+            <label>Status Code</label>
+            <description>HTTP response status code (e.g., 200, 400, 401, 500).</description>
+            <fieldtype>INTEGER</fieldtype>
+            <ismandatory>T</ismandatory>
+            <displaytype>INLINE</displaytype>
+            <displayheight>1</displayheight>
+            <displaywidth>10</displaywidth>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+            <globalsearch>F</globalsearch>
+        </customrecordcustomfield>
+
+        <!-- Duration (milliseconds) -->
+        <customrecordcustomfield scriptid="custrecord_qbn_log_duration">
+            <label>Duration (ms)</label>
+            <description>Request round-trip duration in milliseconds.</description>
+            <fieldtype>INTEGER</fieldtype>
+            <ismandatory>F</ismandatory>
+            <displaytype>INLINE</displaytype>
+            <displayheight>1</displayheight>
+            <displaywidth>10</displaywidth>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+            <globalsearch>F</globalsearch>
+        </customrecordcustomfield>
+
+        <!-- User -->
+        <customrecordcustomfield scriptid="custrecord_qbn_log_user">
+            <label>User</label>
+            <description>The NetSuite user who triggered the API call.</description>
+            <fieldtype>SELECT</fieldtype>
+            <selectrecordtype>-4</selectrecordtype>
+            <ismandatory>F</ismandatory>
+            <displaytype>INLINE</displaytype>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+            <globalsearch>F</globalsearch>
+        </customrecordcustomfield>
+
+        <!-- Error Message -->
+        <customrecordcustomfield scriptid="custrecord_qbn_log_error">
+            <label>Error Message</label>
+            <description>Error details if the API call failed. Empty for successful calls.</description>
+            <fieldtype>TEXTAREA</fieldtype>
+            <ismandatory>F</ismandatory>
+            <displaytype>INLINE</displaytype>
+            <displayheight>3</displayheight>
+            <displaywidth>80</displaywidth>
+            <maxlength>4000</maxlength>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>F</showinlist>
+            <globalsearch>F</globalsearch>
+        </customrecordcustomfield>
+
+        <!-- Request Date -->
+        <customrecordcustomfield scriptid="custrecord_qbn_log_date">
+            <label>Request Date</label>
+            <description>Date and time the API request was made.</description>
+            <fieldtype>DATETIMETZ</fieldtype>
+            <ismandatory>T</ismandatory>
+            <displaytype>INLINE</displaytype>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+            <globalsearch>F</globalsearch>
+        </customrecordcustomfield>
+
+        <!-- Source Record Type -->
+        <customrecordcustomfield scriptid="custrecord_qbn_log_src_type">
+            <label>Source Record Type</label>
+            <description>The record type that triggered the API call (e.g., vendor, customer).</description>
+            <fieldtype>TEXT</fieldtype>
+            <ismandatory>F</ismandatory>
+            <displaytype>INLINE</displaytype>
+            <displayheight>1</displayheight>
+            <displaywidth>30</displaywidth>
+            <maxlength>50</maxlength>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+            <globalsearch>F</globalsearch>
+        </customrecordcustomfield>
+
+        <!-- Source Record ID -->
+        <customrecordcustomfield scriptid="custrecord_qbn_log_src_id">
+            <label>Source Record ID</label>
+            <description>Internal ID of the record that triggered the API call.</description>
+            <fieldtype>INTEGER</fieldtype>
+            <ismandatory>F</ismandatory>
+            <displaytype>INLINE</displaytype>
+            <displayheight>1</displayheight>
+            <displaywidth>15</displaywidth>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+            <globalsearch>F</globalsearch>
+        </customrecordcustomfield>
+    </customrecordcustomfields>
+</customrecordtype>

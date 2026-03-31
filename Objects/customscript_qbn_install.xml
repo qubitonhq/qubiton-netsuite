@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundleInstallationScript scriptid="customscript_qbn_install">
+    <name>QubitOn Bundle Installation</name>
+    <scriptfile>[/SuiteScripts/QubitOn/qubiton_install.js]</scriptfile>
+    <notifyadmins>T</notifyadmins>
+    <description>Handles bundle installation, update, and uninstallation for the QubitOn connector. Creates default configuration records and validates prerequisites.</description>
+    <scriptdeployments>
+        <scriptdeployment scriptid="customdeploy_qbn_install">
+            <status>RELEASED</status>
+            <loglevel>AUDIT</loglevel>
+        </scriptdeployment>
+    </scriptdeployments>
+</bundleInstallationScript>

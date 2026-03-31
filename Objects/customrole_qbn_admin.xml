@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<role scriptid="customrole_qbn_admin">
+    <name>QubitOn Administrator</name>
+    <description>Full access to QubitOn configuration, validation, and logs</description>
+    <permissions>
+        <permission>
+            <permkey>customrecord_qubiton_config</permkey>
+            <permlevel>FULL</permlevel>
+        </permission>
+        <permission>
+            <permkey>customrecord_qubiton_val_cfg</permkey>
+            <permlevel>FULL</permlevel>
+        </permission>
+        <permission>
+            <permkey>customrecord_qubiton_api_log</permkey>
+            <permlevel>VIEW</permlevel>
+        </permission>
+    </permissions>
+</role>

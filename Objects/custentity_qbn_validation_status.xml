@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entitycustomfield scriptid="custentity_qbn_validation_status">
+    <label>QubitOn Status</label>
+    <description>Validation status from the last QubitOn run.</description>
+    <fieldtype>TEXT</fieldtype>
+    <ismandatory>F</ismandatory>
+    <displaytype>DISABLED</displaytype>
+    <maxlength>20</maxlength>
+    <isformula>F</isformula>
+    <storevalue>T</storevalue>
+    <showinlist>T</showinlist>
+    <appliestocustomer>T</appliestocustomer>
+    <appliestovendor>T</appliestovendor>
+    <appliestopartner>T</appliestopartner>
+    <appliestoemployee>T</appliestoemployee>
+    <appliestocontact>T</appliestocontact>
+</entitycustomfield>

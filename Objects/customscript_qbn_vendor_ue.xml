@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<userEventScript scriptid="customscript_qbn_vendor_ue">
+    <name>QubitOn Vendor Validation</name>
+    <scriptfile>[/SuiteScripts/QubitOn/qubiton_vendor_ue.js]</scriptfile>
+    <notifyadmins>F</notifyadmins>
+    <description>Validates vendor records against QubitOn API on create/edit</description>
+    <scriptdeployments>
+        <scriptdeployment scriptid="customdeploy_qbn_vendor_ue">
+            <recordtype>vendor</recordtype>
+            <status>RELEASED</status>
+            <allroles>T</allroles>
+            <loglevel>AUDIT</loglevel>
+        </scriptdeployment>
+    </scriptdeployments>
+</userEventScript>

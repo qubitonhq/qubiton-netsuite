@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest projecttype="ACCOUNTCUSTOMIZATION">
+    <projectname>QubitOnConnector</projectname>
+    <frameworkversion>1.0</frameworkversion>
+    <defaultversion>1.0.0</defaultversion>
+    <description>QubitOn API Connector — 42 business data validation APIs for NetSuite</description>
+    <dependencies>
+        <features>
+            <feature required="true">SERVERSIDESCRIPTING</feature>
+            <feature required="true">CUSTOMRECORDS</feature>
+        </features>
+    </dependencies>
+</manifest>

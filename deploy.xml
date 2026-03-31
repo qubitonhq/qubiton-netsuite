@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deploy>
+    <configuration>
+        <path>Objects/customrecord_qubiton_config.xml</path>
+        <path>Objects/customrecord_qubiton_val_cfg.xml</path>
+        <path>Objects/customrecord_qubiton_api_log.xml</path>
+    </configuration>
+    <objects>
+        <path>Objects/customrecord_qubiton_config.xml</path>
+        <path>Objects/customrecord_qubiton_val_cfg.xml</path>
+        <path>Objects/customrecord_qubiton_api_log.xml</path>
+        <path>Objects/customscript_qbn_vendor_ue.xml</path>
+        <path>Objects/customscript_qbn_customer_ue.xml</path>
+        <path>Objects/customscript_qbn_batch_mr.xml</path>
+        <path>Objects/customscript_qbn_config_sl.xml</path>
+        <path>Objects/customscript_qbn_client.xml</path>
+        <path>Objects/customscript_qbn_install.xml</path>
+        <path>Objects/customscript_qbn_cleanup_sl.xml</path>
+        <path>Objects/customrole_qbn_admin.xml</path>
+        <path>Objects/custentity_qbn_validation_status.xml</path>
+        <path>Objects/custentity_qbn_validation_date.xml</path>
+        <path>Objects/custentity_qbn_validation_score.xml</path>
+        <path>Objects/custentity_qbn_validation_details.xml</path>
+        <path>Objects/custentity_qbn_validation_id.xml</path>
+        <path>Objects/custentity_qbn_bank_account.xml</path>
+        <path>Objects/custentity_qbn_bank_routing.xml</path>
+        <path>Objects/custentity_qbn_bank_country.xml</path>
+    </objects>
+    <files>
+        <path>~/FileCabinet/SuiteScripts/QubitOn/qubiton_api_client.js</path>
+        <path>~/FileCabinet/SuiteScripts/QubitOn/qubiton_validation.js</path>
+        <path>~/FileCabinet/SuiteScripts/QubitOn/qubiton_vendor_ue.js</path>
+        <path>~/FileCabinet/SuiteScripts/QubitOn/qubiton_customer_ue.js</path>
+        <path>~/FileCabinet/SuiteScripts/QubitOn/qubiton_batch_mr.js</path>
+        <path>~/FileCabinet/SuiteScripts/QubitOn/qubiton_client.js</path>
+        <path>~/FileCabinet/SuiteScripts/QubitOn/qubiton_config_sl.js</path>
+        <path>~/FileCabinet/SuiteScripts/QubitOn/qubiton_install.js</path>
+        <path>~/FileCabinet/SuiteScripts/QubitOn/qubiton_cleanup_sl.js</path>
+    </files>
+</deploy>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapReduceScript scriptid="customscript_qbn_batch_mr">
+    <name>QubitOn Batch Validation</name>
+    <scriptfile>[/SuiteScripts/QubitOn/qubiton_batch_mr.js]</scriptfile>
+    <notifyadmins>F</notifyadmins>
+    <description>Batch validates vendor and customer records against QubitOn API using Map/Reduce for high-volume processing</description>
+    <scriptdeployments>
+        <scriptdeployment scriptid="customdeploy_qbn_batch_mr">
+            <status>RELEASED</status>
+            <loglevel>AUDIT</loglevel>
+        </scriptdeployment>
+    </scriptdeployments>
+</mapReduceScript>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<clientScript scriptid="customscript_qbn_client">
+    <name>QubitOn Client Validation</name>
+    <scriptfile>[/SuiteScripts/QubitOn/qubiton_client.js]</scriptfile>
+    <notifyadmins>F</notifyadmins>
+    <description>Client-side field validation and UI enhancements for QubitOn on vendor and customer records</description>
+    <scriptdeployments>
+        <scriptdeployment scriptid="customdeploy_qbn_client_vendor">
+            <recordtype>vendor</recordtype>
+            <status>RELEASED</status>
+            <allroles>T</allroles>
+            <loglevel>DEBUG</loglevel>
+        </scriptdeployment>
+        <scriptdeployment scriptid="customdeploy_qbn_client_customer">
+            <recordtype>customer</recordtype>
+            <status>RELEASED</status>
+            <allroles>T</allroles>
+            <loglevel>DEBUG</loglevel>
+        </scriptdeployment>
+    </scriptdeployments>
+</clientScript>

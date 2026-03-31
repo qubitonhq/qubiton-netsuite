@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suitelet scriptid="customscript_qbn_config_sl">
+    <name>QubitOn Configuration Dashboard</name>
+    <scriptfile>[/SuiteScripts/QubitOn/qubiton_config_sl.js]</scriptfile>
+    <notifyadmins>F</notifyadmins>
+    <description>Admin dashboard for QubitOn configuration, API connectivity testing, and validation management</description>
+    <scriptdeployments>
+        <scriptdeployment scriptid="customdeploy_qbn_config_sl">
+            <status>RELEASED</status>
+            <allroles>T</allroles>
+            <loglevel>DEBUG</loglevel>
+            <title>QubitOn Configuration</title>
+        </scriptdeployment>
+    </scriptdeployments>
+</suitelet>

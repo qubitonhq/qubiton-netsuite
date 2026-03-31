@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customrecordtype scriptid="customrecord_qubiton_val_cfg">
+    <recordname>QubitOn Validation Config</recordname>
+    <abbreviation>QBN Val Cfg</abbreviation>
+    <description>Per-record-type validation rules. Each row defines which QubitOn validations run on a specific NetSuite record type (vendor, customer, partner, etc.) and how failures are handled.</description>
+    <includename>T</includename>
+    <showid>F</showid>
+    <shownotes>F</shownotes>
+    <showcreateddate>T</showcreateddate>
+    <showlastmodified>T</showlastmodified>
+    <allowattachments>F</allowattachments>
+    <allowinlineediting>T</allowinlineediting>
+    <allowinlinedeleting>T</allowinlinedeleting>
+    <allowquickadd>F</allowquickadd>
+    <allowquicksearch>T</allowquicksearch>
+    <allowuiaccess>T</allowuiaccess>
+    <enablemailmerge>F</enablemailmerge>
+    <enablenumbering>F</enablenumbering>
+    <isinactive>F</isinactive>
+    <isordered>F</isordered>
+    <icon>CUSTOM18</icon>
+    <customrecordcustomfields>
+        <!-- Record Type -->
+        <customrecordcustomfield scriptid="custrecord_qbn_vc_record_type">
+            <label>Record Type</label>
+            <description>The NetSuite record type this configuration applies to. Valid values: vendor, customer, partner, employee, contact.</description>
+            <fieldtype>TEXT</fieldtype>
+            <ismandatory>T</ismandatory>
+            <displaytype>NORMAL</displaytype>
+            <displayheight>1</displayheight>
+            <displaywidth>30</displaywidth>
+            <maxlength>30</maxlength>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+            <globalsearch>F</globalsearch>
+            <help>Enter the record type: vendor, customer, partner, employee, or contact.</help>
+        </customrecordcustomfield>
+
+        <!-- Error Mode Override -->
+        <customrecordcustomfield scriptid="custrecord_qbn_vc_error_mode">
+            <label>Error Mode Override</label>
+            <description>Overrides the global error mode for this record type. E = Error, W = Warning, S = Silent. Leave blank to use the global setting.</description>
+            <fieldtype>TEXT</fieldtype>
+            <ismandatory>F</ismandatory>
+            <displaytype>NORMAL</displaytype>
+            <displayheight>1</displayheight>
+            <displaywidth>10</displaywidth>
+            <maxlength>1</maxlength>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+            <globalsearch>F</globalsearch>
+            <help>Override global error mode. E = Error, W = Warning, S = Silent. Blank = use global.</help>
+        </customrecordcustomfield>
+
+        <!-- Country Filter -->
+        <customrecordcustomfield scriptid="custrecord_qbn_vc_countries">
+            <label>Country Filter</label>
+            <description>Comma-separated ISO 3166-1 alpha-2 country codes. When set, validations only run for records in these countries. Leave blank for all countries.</description>
+            <fieldtype>TEXTAREA</fieldtype>
+            <ismandatory>F</ismandatory>
+            <displaytype>NORMAL</displaytype>
+            <displayheight>2</displayheight>
+            <displaywidth>60</displaywidth>
+            <maxlength>500</maxlength>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>F</showinlist>
+            <globalsearch>F</globalsearch>
+            <help>Comma-separated country codes (e.g., US,CA,GB). Blank = all countries.</help>
+        </customrecordcustomfield>
+
+        <!-- Validate Address -->
+        <customrecordcustomfield scriptid="custrecord_qbn_vc_address">
+            <label>Validate Address</label>
+            <description>Run address validation on record save.</description>
+            <fieldtype>CHECKBOX</fieldtype>
+            <ismandatory>F</ismandatory>
+            <defaultvalue>T</defaultvalue>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+        </customrecordcustomfield>
+
+        <!-- Validate Tax ID -->
+        <customrecordcustomfield scriptid="custrecord_qbn_vc_tax">
+            <label>Validate Tax ID</label>
+            <description>Run tax ID validation on record save.</description>
+            <fieldtype>CHECKBOX</fieldtype>
+            <ismandatory>F</ismandatory>
+            <defaultvalue>T</defaultvalue>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+        </customrecordcustomfield>
+
+        <!-- Validate Bank Account -->
+        <customrecordcustomfield scriptid="custrecord_qbn_vc_bank">
+            <label>Validate Bank Account</label>
+            <description>Run bank account validation on record save (routing number, IBAN, SWIFT).</description>
+            <fieldtype>CHECKBOX</fieldtype>
+            <ismandatory>F</ismandatory>
+            <defaultvalue>F</defaultvalue>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+        </customrecordcustomfield>
+
+        <!-- Validate Email -->
+        <customrecordcustomfield scriptid="custrecord_qbn_vc_email">
+            <label>Validate Email</label>
+            <description>Run email deliverability validation on record save.</description>
+            <fieldtype>CHECKBOX</fieldtype>
+            <ismandatory>F</ismandatory>
+            <defaultvalue>F</defaultvalue>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+        </customrecordcustomfield>
+
+        <!-- Validate Phone -->
+        <customrecordcustomfield scriptid="custrecord_qbn_vc_phone">
+            <label>Validate Phone</label>
+            <description>Run phone number validation on record save.</description>
+            <fieldtype>CHECKBOX</fieldtype>
+            <ismandatory>F</ismandatory>
+            <defaultvalue>F</defaultvalue>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+        </customrecordcustomfield>
+
+        <!-- Sanctions Screening -->
+        <customrecordcustomfield scriptid="custrecord_qbn_vc_sanctions">
+            <label>Sanctions Screening</label>
+            <description>Run global sanctions screening (OFAC, EU, UN, UK HMT) on record save.</description>
+            <fieldtype>CHECKBOX</fieldtype>
+            <ismandatory>F</ismandatory>
+            <defaultvalue>F</defaultvalue>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+        </customrecordcustomfield>
+
+        <!-- PEP Screening -->
+        <customrecordcustomfield scriptid="custrecord_qbn_vc_pep">
+            <label>PEP Screening</label>
+            <description>Run Politically Exposed Person screening on record save.</description>
+            <fieldtype>CHECKBOX</fieldtype>
+            <ismandatory>F</ismandatory>
+            <defaultvalue>F</defaultvalue>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+        </customrecordcustomfield>
+
+        <!-- Bankruptcy Check -->
+        <customrecordcustomfield scriptid="custrecord_qbn_vc_bankruptcy">
+            <label>Bankruptcy Check</label>
+            <description>Run bankruptcy filing check on record save.</description>
+            <fieldtype>CHECKBOX</fieldtype>
+            <ismandatory>F</ismandatory>
+            <defaultvalue>F</defaultvalue>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+        </customrecordcustomfield>
+
+        <!-- Business Registration Lookup -->
+        <customrecordcustomfield scriptid="custrecord_qbn_vc_bizreg">
+            <label>Business Registration</label>
+            <description>Look up company registration details on record save.</description>
+            <fieldtype>CHECKBOX</fieldtype>
+            <ismandatory>F</ismandatory>
+            <defaultvalue>F</defaultvalue>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+        </customrecordcustomfield>
+
+        <!-- Disqualified Director Check -->
+        <customrecordcustomfield scriptid="custrecord_qbn_vc_directors">
+            <label>Disqualified Director Check</label>
+            <description>Check for disqualified directors on record save.</description>
+            <fieldtype>CHECKBOX</fieldtype>
+            <ismandatory>F</ismandatory>
+            <defaultvalue>F</defaultvalue>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+        </customrecordcustomfield>
+
+        <!-- Healthcare Exclusion -->
+        <customrecordcustomfield scriptid="custrecord_qbn_vc_healthcare">
+            <label>Healthcare Exclusion</label>
+            <description>Check healthcare exclusion lists on record save.</description>
+            <fieldtype>CHECKBOX</fieldtype>
+            <ismandatory>F</ismandatory>
+            <defaultvalue>F</defaultvalue>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+        </customrecordcustomfield>
+
+        <!-- EPA Prosecution -->
+        <customrecordcustomfield scriptid="custrecord_qbn_vc_epa">
+            <label>EPA Prosecution Check</label>
+            <description>Check EPA enforcement actions on record save.</description>
+            <fieldtype>CHECKBOX</fieldtype>
+            <ismandatory>F</ismandatory>
+            <defaultvalue>F</defaultvalue>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+        </customrecordcustomfield>
+
+        <!-- ESG Score -->
+        <customrecordcustomfield scriptid="custrecord_qbn_vc_esg">
+            <label>ESG Score Lookup</label>
+            <description>Look up ESG (Environmental, Social, Governance) score on record save.</description>
+            <fieldtype>CHECKBOX</fieldtype>
+            <ismandatory>F</ismandatory>
+            <defaultvalue>F</defaultvalue>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+        </customrecordcustomfield>
+
+        <!-- Risk Assessment -->
+        <customrecordcustomfield scriptid="custrecord_qbn_vc_risk">
+            <label>Risk Assessment</label>
+            <description>Run comprehensive entity risk assessment on record save.</description>
+            <fieldtype>CHECKBOX</fieldtype>
+            <ismandatory>F</ismandatory>
+            <defaultvalue>F</defaultvalue>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+        </customrecordcustomfield>
+
+        <!-- Peppol Validation -->
+        <customrecordcustomfield scriptid="custrecord_qbn_vc_peppol">
+            <label>Peppol Validation</label>
+            <description>Validate Peppol participant ID on record save.</description>
+            <fieldtype>CHECKBOX</fieldtype>
+            <ismandatory>F</ismandatory>
+            <defaultvalue>F</defaultvalue>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+        </customrecordcustomfield>
+
+        <!-- Stop on Fail -->
+        <customrecordcustomfield scriptid="custrecord_qbn_vc_stop_on_fail">
+            <label>Stop on Fail</label>
+            <description>When enabled, a failed validation will block the record from being saved (when error mode is E).</description>
+            <fieldtype>CHECKBOX</fieldtype>
+            <ismandatory>F</ismandatory>
+            <defaultvalue>F</defaultvalue>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+        </customrecordcustomfield>
+
+        <!-- Active Flag -->
+        <customrecordcustomfield scriptid="custrecord_qbn_vc_active">
+            <label>Active</label>
+            <description>Enable or disable this validation configuration. Inactive configs are ignored.</description>
+            <fieldtype>CHECKBOX</fieldtype>
+            <ismandatory>F</ismandatory>
+            <defaultvalue>T</defaultvalue>
+            <isformula>F</isformula>
+            <storevalue>T</storevalue>
+            <showinlist>T</showinlist>
+        </customrecordcustomfield>
+    </customrecordcustomfields>
+</customrecordtype>

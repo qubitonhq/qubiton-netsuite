@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<userEventScript scriptid="customscript_qbn_customer_ue">
+    <name>QubitOn Customer Validation</name>
+    <scriptfile>[/SuiteScripts/QubitOn/qubiton_customer_ue.js]</scriptfile>
+    <notifyadmins>F</notifyadmins>
+    <description>Validates customer records against QubitOn API on create/edit</description>
+    <scriptdeployments>
+        <scriptdeployment scriptid="customdeploy_qbn_customer_ue">
+            <recordtype>customer</recordtype>
+            <status>RELEASED</status>
+            <allroles>T</allroles>
+            <loglevel>AUDIT</loglevel>
+        </scriptdeployment>
+    </scriptdeployments>
+</userEventScript>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entitycustomfield scriptid="custentity_qbn_validation_id">
+    <label>QubitOn Validation ID</label>
+    <description>Unique ID for audit trail correlation.</description>
+    <fieldtype>TEXT</fieldtype>
+    <ismandatory>F</ismandatory>
+    <displaytype>DISABLED</displaytype>
+    <maxlength>50</maxlength>
+    <isformula>F</isformula>
+    <storevalue>T</storevalue>
+    <showinlist>F</showinlist>
+    <appliestocustomer>T</appliestocustomer>
+    <appliestovendor>T</appliestovendor>
+    <appliestopartner>T</appliestopartner>
+    <appliestoemployee>T</appliestoemployee>
+    <appliestocontact>T</appliestocontact>
+</entitycustomfield>

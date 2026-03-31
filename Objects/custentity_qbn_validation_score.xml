@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entitycustomfield scriptid="custentity_qbn_validation_score">
+    <label>QubitOn Score</label>
+    <description>Validation score 0-100 from last run.</description>
+    <fieldtype>INTEGER</fieldtype>
+    <ismandatory>F</ismandatory>
+    <displaytype>DISABLED</displaytype>
+    <minvalue>0</minvalue>
+    <maxvalue>100</maxvalue>
+    <isformula>F</isformula>
+    <storevalue>T</storevalue>
+    <showinlist>T</showinlist>
+    <appliestocustomer>T</appliestocustomer>
+    <appliestovendor>T</appliestovendor>
+    <appliestopartner>T</appliestopartner>
+    <appliestoemployee>T</appliestoemployee>
+    <appliestocontact>T</appliestocontact>
+</entitycustomfield>

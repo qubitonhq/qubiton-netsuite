@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entitycustomfield scriptid="custentity_qbn_bank_routing">
+    <label>QubitOn Bank Routing</label>
+    <description>Last validated routing number.</description>
+    <fieldtype>TEXT</fieldtype>
+    <ismandatory>F</ismandatory>
+    <displaytype>DISABLED</displaytype>
+    <maxlength>50</maxlength>
+    <isformula>F</isformula>
+    <storevalue>T</storevalue>
+    <showinlist>F</showinlist>
+    <appliestovendor>T</appliestovendor>
+    <appliestocustomer>F</appliestocustomer>
+    <appliestopartner>F</appliestopartner>
+    <appliestoemployee>F</appliestoemployee>
+    <appliestocontact>F</appliestocontact>
+</entitycustomfield>

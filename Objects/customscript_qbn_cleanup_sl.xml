@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suitelet scriptid="customscript_qbn_cleanup_sl">
+    <name>QubitOn Log Cleanup</name>
+    <scriptfile>[/SuiteScripts/QubitOn/qubiton_cleanup_sl.js]</scriptfile>
+    <notifyadmins>F</notifyadmins>
+    <description>Suitelet for managing and purging old QubitOn API log records based on retention policies</description>
+    <scriptdeployments>
+        <scriptdeployment scriptid="customdeploy_qbn_cleanup_sl">
+            <status>RELEASED</status>
+            <allroles>T</allroles>
+            <loglevel>DEBUG</loglevel>
+            <title>QubitOn Log Cleanup</title>
+        </scriptdeployment>
+    </scriptdeployments>
+</suitelet>
