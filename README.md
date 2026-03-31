@@ -373,6 +373,19 @@ suitecloud project:deploy
 - Descriptive error messages with context
 - No external dependencies beyond standard SuiteScript modules
 
+## Other Integrations
+
+QubitOn provides native connectors and SDKs for other platforms:
+
+| Connector | Platform | Language | Repo |
+|-----------|----------|----------|------|
+| **Go SDK** | Any platform | Go | [qubiton-go](https://github.com/qubitonhq/qubiton-go) |
+| **SAP S/4HANA** | SAP ECC, S/4HANA, BTP | ABAP | [qubiton-sap](https://github.com/qubitonhq/qubiton-sap) |
+| **Oracle** | Oracle DB 11g+, EBS, Fusion | PL/SQL | [qubiton-oracle](https://github.com/qubitonhq/qubiton-oracle) |
+| **QuickBooks Online** | QuickBooks Online | TypeScript | [qubiton-quickbooks](https://github.com/qubitonhq/qubiton-quickbooks) |
+
+Plus 30+ pre-built integrations for Salesforce, HubSpot, Snowflake, Databricks, Zapier, Make, and more at [www.qubiton.com/integrations](https://www.qubiton.com/integrations).
+
 ## License
 
 [MIT](LICENSE) -- Copyright (c) 2026 [apexanalytix, Inc.](https://www.apexanalytix.com)
