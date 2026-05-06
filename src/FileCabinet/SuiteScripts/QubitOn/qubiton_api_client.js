@@ -712,9 +712,16 @@ function (https, log, runtime, record, search, error) {
      * 17. Retrieve ESG (Environmental, Social, Governance) scores.
      * POST /api/esg/Scores
      *
+     * Note: country and domain are bound on the server as [FromQuery]
+     * parameters on ESGController, not body — the SDK serialises them
+     * into the URL query string. Sending them in the body would silently
+     * no-op.
+     *
      * @param {Object} params
-     * @param {string} params.companyName - Company name (required)
-     * @param {number} [params.esgId] - ESG identifier (integer)
+     * @param {string} params.companyName - Company name (required, body)
+     * @param {number} [params.esgId] - ESG identifier (integer, body)
+     * @param {string} [params.country] - ISO country (query string)
+     * @param {string} [params.domain] - Company domain (query string)
      * @returns {Object|null} ESG scores
      */
     function validateEsgScore(params) {
@@ -723,7 +730,13 @@ function (https, log, runtime, record, search, error) {
             companyName: params.companyName,
             esgId: params.esgId
         });
-        return callApi('POST', '/api/esg/Scores', payload);
+
+        const qs = [];
+        if (params.country) qs.push('country=' + encodeURIComponent(params.country));
+        if (params.domain)  qs.push('domain='  + encodeURIComponent(params.domain));
+        const path = qs.length ? '/api/esg/Scores?' + qs.join('&') : '/api/esg/Scores';
+
+        return callApi('POST', path, payload);
     }
 
     /**
