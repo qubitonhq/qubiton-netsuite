@@ -154,9 +154,12 @@ function(search, record, log, runtime, error, validation) {
 
         const recordId = searchResult.id;
 
-        // Check governance before making API call
+        // Check governance before making API call.
+        // Per record we expect: record.load (10) + multiple validation API calls
+        // (~10 each, typically 3–6) + result write back. 300 leaves headroom
+        // for a slow API call returning a large body.
         const remainingUsage = currentScript.getRemainingUsage();
-        if (remainingUsage < 200) {
+        if (remainingUsage < 300) {
             log.audit({
                 title: 'QubitOn Batch MR - Governance Warning',
                 details: `Record ${recordId}: only ${remainingUsage} units remaining`
@@ -265,10 +268,13 @@ function(search, record, log, runtime, error, validation) {
             return;
         }
 
-        // Update the record with validation results if enabled
+        // Update the record with validation results if enabled.
+        // submitFields costs 10 units; threshold 100 leaves room for the
+        // current write plus the next reduce-key iteration's check without
+        // running governance dry mid-batch.
         if (updateRecord && result.status !== 'deferred') {
             const remainingUsage = currentScript.getRemainingUsage();
-            if (remainingUsage < 50) {
+            if (remainingUsage < 100) {
                 log.audit({
                     title: 'QubitOn Batch MR - reduce Governance Warning',
                     details: `Record ${recordId}: only ${remainingUsage} units remaining, skipping update`

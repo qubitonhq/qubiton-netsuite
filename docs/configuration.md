@@ -12,7 +12,6 @@ Navigate to **Customization > Lists, Records, & Fields > Record Types > QubitOn 
 |-------|-----------|------|---------|-------------|
 | API Key | `custrecord_qbn_api_key` | Password | (required) | Your QubitOn API key. Masked in the UI for security. |
 | Base URL | `custrecord_qbn_base_url` | Text | `https://api.qubiton.com` | API base URL. Change only for testing or on-prem. |
-| Timeout | `custrecord_qbn_timeout` | Integer | `30` | HTTP timeout in seconds (5-300). |
 | Error Mode | `custrecord_qbn_error_mode` | Select | `W` | Global error handling: E, W, or S. |
 | Enable Logging | `custrecord_qbn_log_enabled` | Checkbox | Checked | Log all API calls to the API Log record. |
 
@@ -31,14 +30,12 @@ define(['N/record', 'N/search'], (record, search) => {
             type: 'customrecord_qubiton_config',
             columns: [
                 'custrecord_qbn_base_url',
-                'custrecord_qbn_timeout',
                 'custrecord_qbn_error_mode',
                 'custrecord_qbn_log_enabled'
             ]
         }).run().each((result) => {
             results.push({
                 baseUrl: result.getValue('custrecord_qbn_base_url'),
-                timeout: parseInt(result.getValue('custrecord_qbn_timeout'), 10) || 30,
                 errorMode: result.getValue('custrecord_qbn_error_mode') || 'W',
                 logEnabled: result.getValue('custrecord_qbn_log_enabled')
             });

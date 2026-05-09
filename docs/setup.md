@@ -168,7 +168,7 @@ Run a quick test to confirm everything is working:
 | Issue | Solution |
 |-------|----------|
 | "SSS_MISSING_REQD_ARGUMENT" error | Ensure the QubitOn Configuration record exists with a valid API key |
-| "SSS_REQUEST_TIME_EXCEEDED" | Increase the timeout value in QubitOn Configuration (default: 30s) |
+| "SSS_REQUEST_TIME_EXCEEDED" | NetSuite caps server-side requests at ~5 min and does not expose a timeout option. Reduce payload size, or split the workload across a Map/Reduce script. |
 | "UNEXPECTED_ERROR" on API call | Check network access to api.qubiton.com; verify API key is valid |
 | Scripts not firing on record save | Verify script deployment status is "Released" and applies to the correct record type |
 | No log records created | Confirm "Enable API Logging" is checked in QubitOn Configuration |

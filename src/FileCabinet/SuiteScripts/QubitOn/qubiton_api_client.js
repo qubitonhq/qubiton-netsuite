@@ -52,7 +52,7 @@ function (https, log, runtime, record, search, error) {
      * Load configuration from the customrecord_qubiton_config custom record.
      * Expects exactly one record to exist. Throws if none found.
      *
-     * @returns {Object} config object with apiKey, baseUrl, timeout, errorMode, logEnabled
+     * @returns {Object} config object with apiKey, baseUrl, errorMode, logEnabled
      */
     function loadConfig() {
         const results = [];
@@ -63,7 +63,6 @@ function (https, log, runtime, record, search, error) {
             columns: [
                 'custrecord_qbn_api_key',
                 'custrecord_qbn_base_url',
-                'custrecord_qbn_timeout',
                 'custrecord_qbn_error_mode',
                 'custrecord_qbn_log_enabled'
             ]
@@ -103,7 +102,6 @@ function (https, log, runtime, record, search, error) {
         return {
             apiKey: apiKey,
             baseUrl: baseUrl,
-            timeout: parseInt(r.getValue('custrecord_qbn_timeout'), 10) || 30,
             errorMode: r.getValue('custrecord_qbn_error_mode') || r.getText('custrecord_qbn_error_mode') || ERROR_MODE.STOP,
             logEnabled: r.getValue('custrecord_qbn_log_enabled') === true ||
                         r.getValue('custrecord_qbn_log_enabled') === 'T'
@@ -256,9 +254,11 @@ function (https, log, runtime, record, search, error) {
      * @returns {Object|null} Parsed JSON response, or null on handled error
      */
     function callApi(httpMethod, endpoint, payload) {
-        // Governance safety net — don't crash the script on an HTTP call
+        // Governance safety net — don't crash the script on an HTTP call.
+        // Threshold covers https.post (~10) + a downstream record.save (20)
+        // plus headroom for response-size variability.
         const remaining = runtime.getCurrentScript().getRemainingUsage();
-        if (remaining < 20) {
+        if (remaining < 100) {
             log.audit({ title: MODULE, details: 'Insufficient governance for API call to ' + endpoint + ' (remaining: ' + remaining + ')' });
             return handleError(getConfig().errorMode, 'callApi', 'Insufficient governance units for API call');
         }
@@ -303,8 +303,15 @@ function (https, log, runtime, record, search, error) {
                 try {
                     return JSON.parse(body);
                 } catch (parseErr) {
-                    // Response is not JSON — return raw body wrapped
-                    return { _raw: body };
+                    log.audit({
+                        title: MODULE + '.callApi',
+                        details: 'Non-JSON response from ' + endpoint + ': ' + (parseErr.message || parseErr)
+                    });
+                    return {
+                        _raw: body,
+                        _parseError: true,
+                        _parseErrorMsg: parseErr.message || String(parseErr)
+                    };
                 }
             }
 
@@ -448,14 +455,27 @@ function (https, log, runtime, record, search, error) {
     }
 
     /**
-     * 4. Validate bank account details (Pro — enhanced validation).
-     * POST /api/bank/validate/pro
+     * 4. Validate bank account details with enhanced ownership verification (Pro tier).
+     * POST /api/bankaccount/pro/validate
      *
-     * @param {Object} params - Same fields as validateBank
-     * @returns {Object|null} Validation result
+     * Request shape mirrors the SAP and Oracle connectors. Note this is a
+     * different endpoint to validateBank — premium-tier ownership matching.
+     *
+     * @param {Object} params
+     * @param {string} params.businessEntityType - Business entity type (required)
+     * @param {string} params.country - Country code (required)
+     * @param {string} params.bankAccountHolder - Account holder name for ownership match (required)
+     * @param {string} [params.accountNumber] - Account number (provide this OR iban)
+     * @param {string} [params.bankCode] - Bank code
+     * @param {string} [params.iban] - IBAN (provide this OR accountNumber)
+     * @param {string} [params.swiftCode] - SWIFT / BIC code
+     * @param {string} [params.routingNumber] - US routing number (forwarded for US-domestic Pro flows)
+     * @param {string} [params.bankNumberType] - Bank number type discriminator (forwarded if set)
+     * @returns {Object|null} Pro validation result
      */
     function validateBankPro(params) {
-        validateRequired('validateBankPro', params, ['country']);
+        validateRequired('validateBankPro', params,
+            ['businessEntityType', 'country', 'bankAccountHolder']);
         if (!params.accountNumber && !params.iban) {
             throw error.create({
                 name: 'QUBITON_MISSING_FIELD',
@@ -463,18 +483,21 @@ function (https, log, runtime, record, search, error) {
                 notifyOff: true
             });
         }
+        // routingNumber and bankNumberType retained as optional — SAP/Oracle
+        // do not send them but existing NetSuite deployments use them for
+        // US Pro flows and the API ignores unknown fields.
         const payload = buildPayload({
-            bankNumberType: params.bankNumberType,
-            bankCode: params.bankCode,
             businessEntityType: params.businessEntityType,
+            country: params.country,
             bankAccountHolder: params.bankAccountHolder,
             accountNumber: params.accountNumber,
             routingNumber: params.routingNumber,
+            bankCode: params.bankCode,
+            bankNumberType: params.bankNumberType,
             iban: params.iban,
-            swiftCode: params.swiftCode,
-            country: params.country
+            swiftCode: params.swiftCode
         });
-        return callApi('POST', '/api/bank/validate/pro', payload);
+        return callApi('POST', '/api/bankaccount/pro/validate', payload);
     }
 
     /**

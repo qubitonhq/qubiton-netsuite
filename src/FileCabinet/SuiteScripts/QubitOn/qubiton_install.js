@@ -29,10 +29,11 @@ define(['N/record', 'N/search', 'N/log', 'N/runtime'],
          */
         var DEFAULT_CONFIG = {
             custrecord_qbn_base_url: 'https://api.qubiton.com',
-            custrecord_qbn_timeout: 30000,
             custrecord_qbn_error_mode: 'E',
             custrecord_qbn_log_enabled: true
-            // custrecord_qbn_api_key intentionally left blank
+            // custrecord_qbn_api_key intentionally left blank.
+            // No timeout field: N/https.request() does not honour a timeout
+            // option in SuiteScript 2.1; the server-side cap (~5 min) applies.
         };
 
         /**
@@ -142,7 +143,7 @@ define(['N/record', 'N/search', 'N/log', 'N/runtime'],
                 rec.setValue({ fieldId: fieldId, value: fieldValues[fieldId] });
             }
 
-            return rec.save({ enableSourcing: false, ignoreMandatoryFields: false });
+            return rec.save({ enableSourcing: false, ignoreMandatoryFields: true });
         }
 
         /**

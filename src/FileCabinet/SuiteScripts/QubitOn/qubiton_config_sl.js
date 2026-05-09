@@ -19,9 +19,10 @@ define([
     'N/runtime',
     'N/url',
     'N/redirect',
+    'N/error',
     './qubiton_api_client',
     './qubiton_validation'
-], function (serverWidget, log, record, search, runtime, url, redirect, api, validation) {
+], function (serverWidget, log, record, search, runtime, url, redirect, error, api, validation) {
 
     // ---------------------------------------------------------------
     // Constants
@@ -36,12 +37,10 @@ define([
         API_KEY:          'custrecord_qbn_api_key',
         API_URL:          'custrecord_qbn_base_url',
         ERROR_MODE:       'custrecord_qbn_error_mode',
-        LOG_ENABLED:      'custrecord_qbn_log_enabled',
-        TIMEOUT:          'custrecord_qbn_timeout'
+        LOG_ENABLED:      'custrecord_qbn_log_enabled'
     };
 
     var DEFAULT_API_URL = 'https://api.qubiton.com';
-    var DEFAULT_TIMEOUT = 30000;
     var MAX_LOG_ROWS    = 50;
 
     // ---------------------------------------------------------------
@@ -124,14 +123,6 @@ define([
             fldErrorMode.defaultValue = config.errorMode;
         }
 
-        var fldTimeout = form.addField({
-            id: 'custpage_timeout',
-            type: serverWidget.FieldType.INTEGER,
-            label: 'Request Timeout (ms)',
-            container: 'custgroup_config'
-        });
-        fldTimeout.defaultValue = config.timeout || DEFAULT_TIMEOUT;
-
         var fldLogEnabled = form.addField({
             id: 'custpage_log_enabled',
             type: serverWidget.FieldType.CHECKBOX,
@@ -177,28 +168,25 @@ define([
             label: 'Action'
         }).updateDisplayType({ displayType: serverWidget.FieldDisplayType.HIDDEN }).defaultValue = 'save';
 
-        // Test Connection button — navigates to the test action URL
+        // Test Connection: rendered as a styled link (no script injection).
+        // url.resolveScript escapes its result, but we still HTML-escape on render
+        // for defence-in-depth.
         var testActionUrl = url.resolveScript({
             scriptId: SCRIPT_ID,
             deploymentId: DEPLOY_ID,
             params: { action: 'test' }
         });
 
-        // addButton functionName must be a function name, not arbitrary JS.
-        // Inject a small inline client script that defines the navigation function.
-        form.clientScriptModulePath = null;
-        var inlineScript = "function qbn_testConnection() { window.location = '" + testActionUrl + "'; }";
         form.addField({
-            id: 'custpage_inline_script',
+            id: 'custpage_test_link',
             type: serverWidget.FieldType.INLINEHTML,
-            label: ' '
-        }).defaultValue = '<script>' + inlineScript + '</script>';
-
-        form.addButton({
-            id: 'custpage_btn_test',
-            label: 'Test Connection',
-            functionName: 'qbn_testConnection'
-        });
+            label: ' ',
+            container: 'custgroup_status'
+        }).defaultValue =
+            '<a href="' + escapeHtml(testActionUrl) + '" ' +
+            'style="display:inline-block;padding:6px 14px;margin-top:8px;' +
+            'background:#1976d2;color:#fff;text-decoration:none;border-radius:4px;' +
+            'font-weight:600;font-size:13px;">Test Connection</a>';
 
         context.response.writePage(form);
     }
@@ -213,17 +201,21 @@ define([
         var apiKey         = params.custpage_api_key       || '';
         var apiUrl         = params.custpage_api_url       || DEFAULT_API_URL;
         var errorMode      = params.custpage_error_mode    || 'E';
-        var timeout        = parseInt(params.custpage_timeout, 10) || DEFAULT_TIMEOUT;
         var logEnabled     = params.custpage_log_enabled     === 'T';
 
         if (!apiKey) {
-            throw new Error('API Key is required');
-        }
-        if (timeout < 1000 || timeout > 120000) {
-            throw new Error('Timeout must be between 1,000 and 120,000 ms');
+            throw error.create({
+                name: 'QBN_INVALID_CONFIG',
+                message: 'API Key is required',
+                notifyOff: false
+            });
         }
         if (['E', 'W', 'S'].indexOf(errorMode) === -1) {
-            throw new Error('Invalid error mode: ' + errorMode);
+            throw error.create({
+                name: 'QBN_INVALID_CONFIG',
+                message: 'Invalid error mode: ' + errorMode,
+                notifyOff: false
+            });
         }
 
         var configId = findConfigRecordId();
@@ -233,7 +225,6 @@ define([
             rec.setValue({ fieldId: FIELD.API_KEY,          value: apiKey });
             rec.setValue({ fieldId: FIELD.API_URL,          value: apiUrl });
             rec.setValue({ fieldId: FIELD.ERROR_MODE,       value: errorMode });
-            rec.setValue({ fieldId: FIELD.TIMEOUT,          value: timeout });
             rec.setValue({ fieldId: FIELD.LOG_ENABLED,      value: logEnabled });
             rec.save();
             log.audit({ title: 'QubitOn Config Updated', details: 'Config record ' + configId + ' updated by ' + runtime.getCurrentUser().email });
@@ -242,7 +233,6 @@ define([
             newRec.setValue({ fieldId: FIELD.API_KEY,          value: apiKey });
             newRec.setValue({ fieldId: FIELD.API_URL,          value: apiUrl });
             newRec.setValue({ fieldId: FIELD.ERROR_MODE,       value: errorMode });
-            newRec.setValue({ fieldId: FIELD.TIMEOUT,          value: timeout });
             newRec.setValue({ fieldId: FIELD.LOG_ENABLED,      value: logEnabled });
             newRec.save();
             log.audit({ title: 'QubitOn Config Created', details: 'New config record created by ' + runtime.getCurrentUser().email });
@@ -426,7 +416,6 @@ define([
                 apiKey: '',
                 apiUrl: DEFAULT_API_URL,
                 errorMode: 'E',
-                timeout: DEFAULT_TIMEOUT,
                 logEnabled: true
             };
         }
@@ -436,7 +425,6 @@ define([
             apiKey:         rec.getValue({ fieldId: FIELD.API_KEY })          || '',
             apiUrl:         rec.getValue({ fieldId: FIELD.API_URL })          || DEFAULT_API_URL,
             errorMode:      rec.getValue({ fieldId: FIELD.ERROR_MODE })       || 'E',
-            timeout:        parseInt(rec.getValue({ fieldId: FIELD.TIMEOUT }), 10) || DEFAULT_TIMEOUT,
             logEnabled:     !!rec.getValue({ fieldId: FIELD.LOG_ENABLED })
         };
     }
