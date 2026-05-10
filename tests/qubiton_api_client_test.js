@@ -220,7 +220,6 @@ define([], function () {
         var configValues = opts.config || {
             custrecord_qbn_api_key: 'test-api-key-12345',
             custrecord_qbn_base_url: 'https://api.qubiton.com',
-            custrecord_qbn_timeout: '30',
             custrecord_qbn_error_mode: opts.errorMode || 'E',
             custrecord_qbn_log_enabled: opts.logEnabled ? 'T' : false
         };
@@ -247,7 +246,7 @@ define([], function () {
             search.create({
                 type: 'customrecord_qubiton_config',
                 filters: [],
-                columns: ['custrecord_qbn_api_key', 'custrecord_qbn_base_url', 'custrecord_qbn_timeout', 'custrecord_qbn_error_mode', 'custrecord_qbn_log_enabled']
+                columns: ['custrecord_qbn_api_key', 'custrecord_qbn_base_url', 'custrecord_qbn_error_mode', 'custrecord_qbn_log_enabled']
             }).run().each(function (result) {
                 results.push(result);
                 return false;
@@ -267,7 +266,6 @@ define([], function () {
             return {
                 apiKey: apiKey,
                 baseUrl: baseUrl,
-                timeout: parseInt(r.getValue('custrecord_qbn_timeout'), 10) || 30,
                 errorMode: r.getValue('custrecord_qbn_error_mode') || ERROR_MODE.STOP,
                 logEnabled: r.getValue('custrecord_qbn_log_enabled') === true || r.getValue('custrecord_qbn_log_enabled') === 'T'
             };
@@ -345,7 +343,7 @@ define([], function () {
                     logApiCall(httpMethod, endpoint, statusCode, durationMs, null);
                     var body = response.body;
                     if (!body) return null;
-                    try { return JSON.parse(body); } catch (parseErr) { return { _raw: body }; }
+                    try { return JSON.parse(body); } catch (parseErr) { return { _raw: body, _parseError: true, _parseErrorMsg: parseErr.message || String(parseErr) }; }
                 }
                 errorMsg = 'HTTP ' + statusCode + ': ' + (response.body || '').substring(0, 1000);
                 logApiCall(httpMethod, endpoint, statusCode, durationMs, errorMsg);
@@ -386,8 +384,9 @@ define([], function () {
             return callApi('POST', '/api/bank/validate', buildPayload({ bankNumberType: params.bankNumberType, bankCode: params.bankCode, businessEntityType: params.businessEntityType, bankAccountHolder: params.bankAccountHolder, accountNumber: params.accountNumber, routingNumber: params.routingNumber, iban: params.iban, swiftCode: params.swiftCode, country: params.country }));
         }
         function validateBankPro(params) {
-            validateRequired('validateBankPro', params, ['accountNumber', 'country']);
-            return callApi('POST', '/api/bank/validate/pro', buildPayload({ bankNumberType: params.bankNumberType, bankCode: params.bankCode, businessEntityType: params.businessEntityType, bankAccountHolder: params.bankAccountHolder, accountNumber: params.accountNumber, routingNumber: params.routingNumber, iban: params.iban, swiftCode: params.swiftCode, country: params.country }));
+            validateRequired('validateBankPro', params, ['businessEntityType', 'country', 'bankAccountHolder']);
+            if (!params.accountNumber && !params.iban) { throw new Error('validateBankPro: either "accountNumber" or "iban" is required'); }
+            return callApi('POST', '/api/bankaccount/pro/validate', buildPayload({ businessEntityType: params.businessEntityType, country: params.country, bankAccountHolder: params.bankAccountHolder, accountNumber: params.accountNumber, routingNumber: params.routingNumber, bankCode: params.bankCode, bankNumberType: params.bankNumberType, iban: params.iban, swiftCode: params.swiftCode }));
         }
         function validatePhone(params) {
             validateRequired('validatePhone', params, ['phoneNumber', 'country']);
@@ -587,7 +586,6 @@ define([], function () {
         assertNotNull(cfg.errorMode, 'errorMode should be present');
         assertEqual(cfg.apiKey, 'test-api-key-12345');
         assertEqual(cfg.baseUrl, 'https://api.qubiton.com');
-        assertEqual(cfg.timeout, 30);
     });
 
     test('loadConfig — missing API key throws QUBITON_CONFIG_INVALID', function () {
@@ -595,7 +593,6 @@ define([], function () {
             createClient({ config: {
                 custrecord_qbn_api_key: '',
                 custrecord_qbn_base_url: 'https://api.qubiton.com',
-                custrecord_qbn_timeout: '30',
                 custrecord_qbn_error_mode: 'E',
                 custrecord_qbn_log_enabled: false
             }});
@@ -607,7 +604,6 @@ define([], function () {
             createClient({ config: {
                 custrecord_qbn_api_key: 'key123',
                 custrecord_qbn_base_url: '',
-                custrecord_qbn_timeout: '30',
                 custrecord_qbn_error_mode: 'E',
                 custrecord_qbn_log_enabled: false
             }});
@@ -618,7 +614,6 @@ define([], function () {
         var client = createClient({ config: {
             custrecord_qbn_api_key: 'key123',
             custrecord_qbn_base_url: 'https://api.qubiton.com',
-            custrecord_qbn_timeout: '30',
             custrecord_qbn_error_mode: '',
             custrecord_qbn_log_enabled: false
         }});
@@ -630,7 +625,6 @@ define([], function () {
         var client = createClient({ config: {
             custrecord_qbn_api_key: 'key123',
             custrecord_qbn_base_url: 'https://api.qubiton.com///',
-            custrecord_qbn_timeout: '30',
             custrecord_qbn_error_mode: 'E',
             custrecord_qbn_log_enabled: false
         }});
@@ -924,14 +918,30 @@ define([], function () {
     });
 
     // ---- 4. validateBankPro ----
-    test('validateBankPro — throws when accountNumber is missing', function () {
-        assertRequiredField(function (c, p) { c.validateBankPro(p); }, { accountNumber: '12345678', country: 'US' }, 'accountNumber', 'validateBankPro');
+    test('validateBankPro — throws when businessEntityType is missing', function () {
+        assertRequiredField(function (c, p) { c.validateBankPro(p); }, { accountNumber: '12345678', country: 'US', businessEntityType: 'Corporation', bankAccountHolder: 'Acme Inc' }, 'businessEntityType', 'validateBankPro');
     });
     test('validateBankPro — throws when country is missing', function () {
-        assertRequiredField(function (c, p) { c.validateBankPro(p); }, { accountNumber: '12345678', country: 'US' }, 'country', 'validateBankPro');
+        assertRequiredField(function (c, p) { c.validateBankPro(p); }, { accountNumber: '12345678', country: 'US', businessEntityType: 'Corporation', bankAccountHolder: 'Acme Inc' }, 'country', 'validateBankPro');
     });
-    test('validateBankPro — calls POST /api/bank/validate/pro', function () {
-        assertMethodCall(function (c, p) { c.validateBankPro(p); }, { accountNumber: '12345678', country: 'US' }, '/api/bank/validate/pro', 'POST');
+    test('validateBankPro — throws when bankAccountHolder is missing', function () {
+        assertRequiredField(function (c, p) { c.validateBankPro(p); }, { accountNumber: '12345678', country: 'US', businessEntityType: 'Corporation', bankAccountHolder: 'Acme Inc' }, 'bankAccountHolder', 'validateBankPro');
+    });
+    test('validateBankPro — calls POST /api/bankaccount/pro/validate', function () {
+        assertMethodCall(function (c, p) { c.validateBankPro(p); }, { accountNumber: '12345678', country: 'US', businessEntityType: 'Corporation', bankAccountHolder: 'Acme Inc' }, '/api/bankaccount/pro/validate', 'POST');
+    });
+    test('validateBankPro — throws when both accountNumber and iban are missing', function () {
+        var client = createClient();
+        var threw = false;
+        try {
+            client.validateBankPro({ country: 'US', businessEntityType: 'Corporation', bankAccountHolder: 'Acme Inc' });
+        } catch (e) {
+            threw = true;
+            if (String(e.message || e).indexOf('accountNumber') === -1 && String(e.message || e).indexOf('iban') === -1) {
+                throw new Error('Error message did not mention accountNumber or iban: ' + (e.message || e));
+            }
+        }
+        if (!threw) throw new Error('Expected validateBankPro to throw when both accountNumber and iban are missing');
     });
 
     // ---- 5. validatePhone ----

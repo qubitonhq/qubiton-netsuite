@@ -59,25 +59,6 @@
             <help>QubitOn API base URL. Leave as default unless directed otherwise.</help>
         </customrecordcustomfield>
 
-        <!-- HTTP Timeout (seconds) -->
-        <customrecordcustomfield scriptid="custrecord_qbn_timeout">
-            <label>Timeout (seconds)</label>
-            <description>HTTP request timeout in seconds. Applies to all API calls. Increase for batch operations or high-latency networks.</description>
-            <fieldtype>INTEGER</fieldtype>
-            <ismandatory>F</ismandatory>
-            <displaytype>NORMAL</displaytype>
-            <displayheight>1</displayheight>
-            <displaywidth>10</displaywidth>
-            <defaultvalue>30</defaultvalue>
-            <minvalue>5</minvalue>
-            <maxvalue>300</maxvalue>
-            <isformula>F</isformula>
-            <storevalue>T</storevalue>
-            <showinlist>T</showinlist>
-            <globalsearch>F</globalsearch>
-            <help>Request timeout in seconds (5-300). Default: 30.</help>
-        </customrecordcustomfield>
-
         <!-- Error Mode -->
         <customrecordcustomfield scriptid="custrecord_qbn_error_mode">
             <label>Error Mode</label>

@@ -18,8 +18,8 @@
  *   fieldChanged  - Real-time field format validation
  *   saveRecord    - Optional client-side pre-save validation
  */
-define(['N/currentRecord', 'N/log', 'N/https', 'N/url', 'N/ui/dialog', 'N/ui/message', 'N/runtime'],
-function(currentRecord, log, https, url, dialog, message, runtime) {
+define(['N/currentRecord', 'N/log', 'N/url', 'N/ui/dialog', 'N/ui/message', 'N/runtime'],
+function(currentRecord, log, url, dialog, message, runtime) {
 
     /**
      * Custom field IDs for validation results on the entity record.
@@ -165,50 +165,59 @@ function(currentRecord, log, https, url, dialog, message, runtime) {
                 '&recordType=' + encodeURIComponent(recordType) +
                 '&recordId=' + encodeURIComponent(recordId || 'NEW');
 
-            // POST the record data to the Suitelet for server-side validation
-            const response = https.post({
-                url: requestUrl,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(recordData)
-            });
+            // POST the record data to the Suitelet via the browser's native
+            // XMLHttpRequest. N/https is server-side only and would fail at
+            // module load in a Client Script — XHR is the supported pattern
+            // for AJAX from a Client Script in SuiteScript 2.1.
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', requestUrl, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState !== 4) return;
 
-            hideActiveBanner();
-            isValidating = false;
+                hideActiveBanner();
+                isValidating = false;
 
-            if (response.code === 200) {
-                let result;
-                try {
-                    result = JSON.parse(response.body);
-                } catch (e) {
-                    showResultBanner('error', 'Invalid response from validation service.');
-                    return;
+                if (xhr.status === 200) {
+                    let result;
+                    try {
+                        result = JSON.parse(xhr.responseText);
+                    } catch (e) {
+                        showResultBanner('error', 'Invalid response from validation service.');
+                        return;
+                    }
+
+                    showValidationResultDialog(result, recordType);
+                    checkAddressCorrectionPrompt(result);
+
+                    if (rec.id) {
+                        showResultBanner(
+                            result.passed ? 'pass' : 'fail',
+                            result.passed
+                                ? `Validation passed (Score: ${result.score || 'N/A'})`
+                                : `Validation failed (Score: ${result.score || 'N/A'}). See details below.`
+                        );
+                    }
+                } else {
+                    log.error({
+                        title: 'QubitOn Client - Validation HTTP Error',
+                        details: `HTTP ${xhr.status}: ${xhr.responseText}`
+                    });
+                    showResultBanner('error',
+                        `Validation service returned an error (HTTP ${xhr.status}). ` +
+                        'Please try again or contact your administrator.');
                 }
-
-                // Display results in a dialog
-                showValidationResultDialog(result, recordType);
-
-                // Check for address correction and prompt accept/reject
-                checkAddressCorrectionPrompt(result);
-
-                // Update the page fields if in edit mode
-                if (rec.id) {
-                    showResultBanner(
-                        result.passed ? 'pass' : 'fail',
-                        result.passed
-                            ? `Validation passed (Score: ${result.score || 'N/A'})`
-                            : `Validation failed (Score: ${result.score || 'N/A'}). See details below.`
-                    );
-                }
-
-            } else {
+            };
+            xhr.onerror = function () {
+                hideActiveBanner();
+                isValidating = false;
                 log.error({
-                    title: 'QubitOn Client - Validation HTTP Error',
-                    details: `HTTP ${response.code}: ${response.body}`
+                    title: 'QubitOn Client - validateNow Network Error',
+                    details: 'XHR failed before receiving a response'
                 });
-                showResultBanner('error',
-                    `Validation service returned an error (HTTP ${response.code}). ` +
-                    'Please try again or contact your administrator.');
-            }
+                showResultBanner('error', 'Network error reaching the validation service.');
+            };
+            xhr.send(JSON.stringify(recordData));
 
         } catch (e) {
             hideActiveBanner();

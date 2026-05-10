@@ -129,7 +129,7 @@ Get your free API key at [www.qubiton.com](https://www.qubiton.com/auth/register
 | 1 | `validateAddress` | POST | `/api/address/validate` | Address validation across 249 countries; USPS-certified for US |
 | 2 | `validateTax` | POST | `/api/tax/validate` | Tax ID validation against government registries |
 | 3 | `validateBank` | POST | `/api/bank/validate` | Bank account validation (routing, IBAN, SWIFT/BIC) |
-| 4 | `validateBankPro` | POST | `/api/bank/validate/pro` | Enhanced bank validation with account name matching |
+| 4 | `validateBankPro` | POST | `/api/bankaccount/pro/validate` | Enhanced bank validation with account name matching |
 | 5 | `validatePhone` | POST | `/api/phone/validate` | Phone number validation and formatting |
 | 6 | `validateEmail` | POST | `/api/email/validate` | Email deliverability and domain validation |
 | 7 | `validateInIdentity` | POST | `/api/inidentity/validate` | Indian identity validation (PAN, Aadhaar, GSTIN) |
